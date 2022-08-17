@@ -65,8 +65,11 @@ public class MeasureActivity extends AppCompatActivity {
 
     public double delay;
 
-    public static Context context_main2;
     public String readMessage = null;
+
+//    TextView result1 = ((Status1Activity)Status1Activity.context_main).result1;
+//    TextView result2 = ((Status2Activity)Status2Activity.context_main).result2;
+//    TextView result3 = ((Status3Activity)Status3Activity.context_main).result3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +77,6 @@ public class MeasureActivity extends AppCompatActivity {
         setContentView(R.layout.activity_measure);
 
         context_main = this;
-        context_main2 = this;
 
         mBluetoothStatus = (TextView)findViewById(R.id.bluetooth_status);
         mReadBuffer = (TextView) findViewById(R.id.read_buffer);
@@ -100,14 +102,18 @@ public class MeasureActivity extends AppCompatActivity {
             public void handleMessage(Message msg){
                 if(msg.what == MESSAGE_READ){
                     try {
+                        //화면전환
                         readMessage = new String((byte[]) msg.obj, "UTF-8");
                         if(Float.parseFloat(readMessage) >= 0 &&  Float.parseFloat(readMessage) < 0.03 ){
+                            //result1.setText(readMessage);
                             Intent intent1 = new Intent(getApplicationContext(), Status1Activity.class);
                             startActivity(intent1);
                         } else if(Float.parseFloat(readMessage) >= 0.03 &&  Float.parseFloat(readMessage) <= 0.08){
+                            //result2.setText(readMessage);
                             Intent intent2 = new Intent(getApplicationContext(), Status2Activity.class);
                             startActivity(intent2);
                         } else {
+                            //result3.setText(readMessage);
                             Intent intent3 = new Intent(getApplicationContext(), Status3Activity.class);
                             startActivity(intent3);
                         }
