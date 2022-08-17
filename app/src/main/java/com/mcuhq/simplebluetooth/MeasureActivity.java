@@ -63,7 +63,10 @@ public class MeasureActivity extends AppCompatActivity {
     public ConnectedThread mConnectedThread; // bluetooth background worker thread to send and receive data
     private BluetoothSocket mBTSocket = null; // bi-directional client-to-client data path
 
-    public double peak;
+    public double delay;
+
+    public static Context context_main2;
+    public String readMessage = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,7 @@ public class MeasureActivity extends AppCompatActivity {
         setContentView(R.layout.activity_measure);
 
         context_main = this;
+        context_main2 = this;
 
         mBluetoothStatus = (TextView)findViewById(R.id.bluetooth_status);
         mReadBuffer = (TextView) findViewById(R.id.read_buffer);
@@ -91,18 +95,28 @@ public class MeasureActivity extends AppCompatActivity {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
 
-
         mHandler = new Handler(Looper.getMainLooper()){
             @Override
             public void handleMessage(Message msg){
                 if(msg.what == MESSAGE_READ){
-                    String readMessage = null;
                     try {
                         readMessage = new String((byte[]) msg.obj, "UTF-8");
+                        if(Float.parseFloat(readMessage) >= 0 &&  Float.parseFloat(readMessage) < 0.03 ){
+                            Intent intent1 = new Intent(getApplicationContext(), Status1Activity.class);
+                            startActivity(intent1);
+                        } else if(Float.parseFloat(readMessage) >= 0.03 &&  Float.parseFloat(readMessage) <= 0.08){
+                            Intent intent2 = new Intent(getApplicationContext(), Status2Activity.class);
+                            startActivity(intent2);
+                        } else {
+                            Intent intent3 = new Intent(getApplicationContext(), Status3Activity.class);
+                            startActivity(intent3);
+                        }
+
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
                     mReadBuffer.setText(readMessage);
+
                 }
 
                 if(msg.what == CONNECTING_STATUS){
@@ -127,22 +141,43 @@ public class MeasureActivity extends AppCompatActivity {
                     if(mConnectedThread != null) //First check to make sure thread created
                         mConnectedThread.write("1");    // 1을 보냄
                         mStartBtn.setText("측정 중 ...");
-                        peak = mConnectedThread.read();    // PEAK 값 수신
+                        delay = mConnectedThread.read();    // PEAK 값 수신
                         mStartBtn.setText("측정 완료");
+
+
+                        //mStartBtn.setText(readMessage.toString()); -> 이것만 살렸을 때 화면 꺼짐
                         //mStartBtn.setText(valueOf(peak));
 
-                        if(peak >= 0 && peak < 0.03) {
-                            Intent intent = new Intent(getApplicationContext(), Status1Activity.class);
-                            startActivity(intent);
-                        } else if(peak >= 0.03 && peak <= 0.08) {
-                            Intent intent = new Intent(getApplicationContext(), Status2Activity.class);
-                            startActivity(intent);
-                        } else {
-                            Intent intent = new Intent(getApplicationContext(), Status3Activity.class);
-                            startActivity(intent);
-                        }
+//                        if(delay >= 0 && delay < 0.03) {
+//                            //result.setText(readMessage);
+//                            Intent intent = new Intent(getApplicationContext(), Status1Activity.class);
+//                            startActivity(intent);
+//                        } else if(delay >= 0.03 && delay <= 0.08) {
+//                            Intent intent = new Intent(getApplicationContext(), Status2Activity.class);
+//                            startActivity(intent);
+//                        } else {
+//                            Intent intent = new Intent(getApplicationContext(), Status3Activity.class);
+//                            startActivity(intent);
+//                        }
+
+//                        //값에 따른 화면 변화 코드 추가한 부분
+//                        // readMessage가 위에서 String으로 선언되어서 값 비교가 불가능하기 때문에 Float.parseFloat() 로 string -> Float 형으로 바꿨다.
+//                        if ( Float.parseFloat(readMessage) >= 0 &&  Float.parseFloat(readMessage) < 0.03 ){
+//                            Intent intent1 = new Intent(getApplicationContext(), Status1Activity.class);
+//                            startActivity(intent1);
+//                        }else if ( Float.parseFloat(readMessage) >= 0.03 &&  Float.parseFloat(readMessage) <= 0.08){
+//                            Intent intent2 = new Intent(getApplicationContext(), Status2Activity.class);
+//                            startActivity(intent2);
+//                        }else{
+//                            Intent intent3 = new Intent(getApplicationContext(), Status3Activity.class);
+//                            startActivity(intent3);
+//                        }
                 }
             });
+
+            //새로 추가한 코드
+
+
 
             mScanBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
