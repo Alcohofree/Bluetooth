@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:gravity="center"
+        android:layout_marginTop="150dp"
+        android:src="@drawable/windy"/>
+
+
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="60dp"
+        android:textSize="17dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:text="안전한 주행을 위해서 안내 화면에 맞춰서 음주 측정을 해주세요."
+        android:padding="20dp"
+        android:background="@drawable/notice_tv_box"
+        />
+
+
+    <Button
+        android:id="@+id/status_gonext3_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="110dp"
+        android:text="다음"
+        android:textSize="23sp"
+        android:textColor="#ffffff"
+        android:background="#7ED2C3"/>
+
+</LinearLayout>

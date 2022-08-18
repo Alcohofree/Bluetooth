@@ -17,13 +17,18 @@
         android:icon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MeasureActivity">
+        <activity android:name=".GuideActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".GuideActivity2"/>
+        <activity android:name=".GuideActivity3"/>
+
+        <activity android:name=".MeasureActivity"/>
 
         <activity android:name=".Status1Activity"/>
         <activity android:name=".Status2Activity"/>
